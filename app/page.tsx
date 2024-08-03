@@ -1,113 +1,139 @@
+'use client';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { FloatingNav } from "@/components/ui/floating-navbar";
+import { TracingBeam } from "@/components/ui/tracing-beam";
 import Image from "next/image";
+import {useTheme} from "next-themes";
+import {SunIcon, MoonIcon} from "lucide-react";
+import dynamic from "next/dynamic";
+
+const ThemeToggle = dynamic(() => import('@/components/ThemeToggle'), { ssr: false });
+
+const features = [
+    {
+        title: 'Responsive Design',
+        description: 'Our layouts look great on any device, big or small.',
+        icon: '📱',
+    },
+    {
+        title: 'Fast Performance',
+        description: 'Optimized for speed to keep your users engaged.',
+        icon: '⚡',
+    },
+    {
+        title: 'Easy Customization',
+        description: 'Tailwind makes it easy to style your components.',
+        icon: '🎨',
+    },
+    {
+        title: 'SEO Friendly',
+        description: 'Built with best practices for search engine optimization.',
+        icon: '🔍',
+    },
+];
+
+const navItems = [
+    {
+        name: "Home",
+        link: "/",
+    },
+    {
+        name: "About",
+        link: "/about",
+    },
+    {
+        name: "Contact",
+        link: "/contact",
+    },
+];
+
+const dummyContent = [
+    {
+        title: "Welcome to Our Next.js App",
+        description: (
+            <>
+                <p>
+                    Scroll down to see our floating navbar and tracing beam in action! Our app combines modern design with powerful features to deliver an exceptional user experience.
+                </p>
+                <p>
+                    Built with Next.js and enhanced with smooth animations, our platform offers responsive layouts, fast performance, easy customization, and SEO-friendly structure.
+                </p>
+            </>
+        ),
+        badge: "Introduction",
+        image: "https://plus.unsplash.com/premium_photo-1661342428515-5ca8cee4385a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    },
+];
 
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    return (
+        <div className="relative min-h-screen bg-background text-foreground">
+            <ThemeToggle />
+            <FloatingNav navItems={navItems} />
+            <TracingBeam className="px-6">
+                <div className="max-w-4xl mx-auto antialiased pt-4 relative">
+                    {dummyContent.map((item, index) => (
+                        <div key={`content-${index}`} className="mb-10">
+                            <h2 className="bg-secondary text-secondary-foreground rounded-full text-sm w-fit px-4 py-1 mb-4">
+                                {item.badge}
+                            </h2>
+
+                            <h1 className="text-4xl font-heading mb-4 text-foreground">
+                                {item.title}
+                            </h1>
+
+                            <div className="text-xl prose prose-invert text-muted-foreground">
+                                {item.image && (
+                                    <div className="relative w-full h-[300px] mb-10">
+                                        <Image
+                                            src={item.image}
+                                            alt="Content image"
+                                            layout="fill"
+                                            objectFit="cover"
+                                            className="rounded-lg"
+                                        />
+                                    </div>
+                                )}
+                                {item.description}
+                            </div>
+                        </div>
+                    ))}
+
+                    <section className="mb-20">
+                        <h2 className="text-3xl font-heading mb-8 text-center text-foreground">
+                            Our Features
+                        </h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            {features.map((feature, index) => (
+                                <motion.div
+                                    key={feature.title}
+                                    className="bg-card text-card-foreground p-6 rounded-lg border border-border"
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: index * 0.1, duration: 0.5 }}
+                                >
+                                    <div className="text-4xl mb-4">{feature.icon}</div>
+                                    <h3 className="text-xl font-heading mb-2">{feature.title}</h3>
+                                    <p className="text-muted-foreground">{feature.description}</p>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </section>
+
+                    <section className="text-center mb-20">
+                        <h2 className="text-3xl font-heading mb-4 text-foreground">Ready to get started?</h2>
+                        <p className="text-xl text-muted-foreground mb-8">Join us today and experience the difference!</p>
+                        <button className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2 px-4 rounded-full transition duration-300">
+                            Sign Up Now
+                        </button>
+                    </section>
+                </div>
+            </TracingBeam>
+
+            <footer className="mt-20 py-8 text-center text-muted-foreground">
+                <p>&copy; 2024 Your Company Name. All rights reserved.</p>
+            </footer>
         </div>
-      </div>
-
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+    );
 }
